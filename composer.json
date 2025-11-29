@@ -1,5 +1,6 @@
 {
     "name": "coroq/view",
+    "description": "Renders plain PHP view template files with data",
     "type": "library",
     "license": "MIT",
     "authors": [
