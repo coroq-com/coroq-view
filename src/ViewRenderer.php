@@ -27,6 +27,17 @@ class ViewRenderer {
   }
 
   public function render(string $template, array $arguments = []): string {
+    try {
+      ob_start();
+      $this->include($template, $arguments);
+      return ob_get_contents();
+    }
+    finally {
+      ob_end_clean();
+    }
+  }
+
+  public function include(string $template, array $arguments = []): void {
     // Reject empty path
     if ($template === '') {
       throw new InvalidArgumentException("Empty path not allowed");
@@ -56,23 +67,12 @@ class ViewRenderer {
       throw new InvalidArgumentException("Template not readable: $template");
     }
 
-    // Render with closure isolation
+    // Include with closure isolation
     $closure = function() {
-      try {
-        ob_start();
-        extract(func_get_arg(1));
-        include func_get_arg(0);
-        return ob_get_contents();
-      }
-      finally {
-        ob_end_clean();
-      }
+      extract(func_get_arg(1));
+      include func_get_arg(0);
     };
     $closure = $closure->bindTo($this, $this);
-    return $closure($fullPath, $arguments);
-  }
-
-  public function include(string $template, array $arguments = []): void {
-    echo $this->render($template, $arguments);
+    $closure($fullPath, $arguments);
   }
 }
