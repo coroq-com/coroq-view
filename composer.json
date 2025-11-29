@@ -1,5 +1,5 @@
 {
-    "name": "coroq/template",
+    "name": "coroq/view",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -9,15 +9,14 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "lib-pcre": "*"
+        "php": "^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.8"
+        "phpunit/phpunit": "^9.6"
     },
     "autoload": {
         "psr-4": {
-            "Coroq\\": "src/"
+            "Coroq\\View\\": "src/"
         }
     },
     "scripts": {
