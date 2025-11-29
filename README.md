@@ -171,7 +171,7 @@ HTML escaping is out of scope for this library. You have three options:
 <h1><?= htmlspecialchars($title) ?></h1>
 ```
 
-**2. Use an HTML handling library like `coroq/html`**
+**2. Use an HTML handling library like [`coroq/html`](https://github.com/ozami/coroq-html)**
 
 ```php
 <h1><?= h($title) ?></h1>
