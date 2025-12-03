@@ -98,6 +98,27 @@ Renders a template and echoes the output directly. Use within templates as `$thi
 - Parameters: Same as `render()`.
 - Returns: Nothing (outputs directly).
 
+### templateExists()
+
+**`templateExists(string $template): bool`**
+
+Checks if a template file exists.
+
+- `$template` - Same as `render()`.
+- Returns: `true` if the template file exists, `false` otherwise.
+
+Useful when rendering templates based on user-provided paths:
+
+```php
+$userPath = 'pages/' . $requestedPage . '.php';
+
+if (!$view->templateExists($userPath)) {
+    return notFound();
+}
+
+return $view->render($userPath, $data);
+```
+
 ### Subclass for helpers
 
 Define reusable components as methods in a ViewRenderer subclass:

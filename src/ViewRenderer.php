@@ -26,32 +26,31 @@ class ViewRenderer {
     $this->templateDirectory = $templateDirectory;
   }
 
-  public function render(string $template, array $arguments = []): string {
-    // Reject empty path
+  public function templateExists(string $template): bool {
+    return is_file($this->resolveTemplatePath($template));
+  }
+
+  protected function resolveTemplatePath(string $template): string {
     if ($template === '') {
       throw new InvalidArgumentException("Empty path not allowed");
     }
-
-    // Reject absolute paths
     if ($template[0] === '/') {
       throw new InvalidArgumentException("Absolute path not allowed: $template");
     }
-
-    // Reject directory traversal
     $parts = explode('/', $template);
     if (in_array('..', $parts, true)) {
       throw new InvalidArgumentException("Path traversal not allowed: $template");
     }
+    return "$this->templateDirectory/$template";
+  }
 
-    // Build full path
-    $fullPath = "$this->templateDirectory/$template";
+  public function render(string $template, array $arguments = []): string {
+    $fullPath = $this->resolveTemplatePath($template);
 
-    // Must be a file (not directory)
     if (!is_file($fullPath)) {
       throw new InvalidArgumentException("Template not a file: $template");
     }
 
-    // File must be readable
     if (!is_readable($fullPath)) {
       throw new InvalidArgumentException("Template not readable: $template");
     }

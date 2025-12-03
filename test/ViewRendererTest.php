@@ -120,6 +120,36 @@ class ViewRendererTest extends TestCase {
     $result = $subclass->render('uses_this.php', []);
     $this->assertStringContainsString('HEADER', $result);
   }
+
+  public function testTemplateExistsReturnsTrueForExistingTemplate() {
+    $this->assertTrue($this->renderer->templateExists('simple.php'));
+  }
+
+  public function testTemplateExistsReturnsFalseForNonExistentTemplate() {
+    $this->assertFalse($this->renderer->templateExists('does_not_exist.php'));
+  }
+
+  public function testTemplateExistsReturnsFalseForDirectory() {
+    $this->assertFalse($this->renderer->templateExists('sub'));
+  }
+
+  public function testTemplateExistsThrowsOnEmptyPath() {
+    $this->expectException(\InvalidArgumentException::class);
+    $this->expectExceptionMessage('Empty path not allowed');
+    $this->renderer->templateExists('');
+  }
+
+  public function testTemplateExistsThrowsOnAbsolutePath() {
+    $this->expectException(\InvalidArgumentException::class);
+    $this->expectExceptionMessage('Absolute path not allowed');
+    $this->renderer->templateExists('/etc/passwd');
+  }
+
+  public function testTemplateExistsThrowsOnPathTraversal() {
+    $this->expectException(\InvalidArgumentException::class);
+    $this->expectExceptionMessage('Path traversal not allowed');
+    $this->renderer->templateExists('../../../etc/passwd');
+  }
 }
 
 // Test subclass to verify helper pattern
